@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.12.1](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.12.0...0.12.1) (2025-08-19)
+
+### Bug Fixes
+
+- support all github pr template locations ([#99](https://github.com/JoshuaKGoldberg/OctoGuide/issues/99)) ([04ca8bb](https://github.com/JoshuaKGoldberg/OctoGuide/commit/04ca8bb44b2730032f21038ac3d9dce20c79756a)), closes [#47](https://github.com/JoshuaKGoldberg/OctoGuide/issues/47)
+
 # [0.12.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.11.4...0.12.0) (2025-07-24)
 
 ### Features
