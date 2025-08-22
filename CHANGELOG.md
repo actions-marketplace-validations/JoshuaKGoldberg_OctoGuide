@@ -1,5 +1,11 @@
 # Changelog
 
+# [0.13.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.12.1...0.13.0) (2025-08-22)
+
+### Features
+
+- mark passed comments as resolved ([#238](https://github.com/JoshuaKGoldberg/OctoGuide/issues/238)) ([58ec5c3](https://github.com/JoshuaKGoldberg/OctoGuide/commit/58ec5c383d8c63187991ae236e827f0c5bb8ae2a)), closes [#202](https://github.com/JoshuaKGoldberg/OctoGuide/issues/202)
+
 ## [0.12.1](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.12.0...0.12.1) (2025-08-19)
 
 ### Bug Fixes
