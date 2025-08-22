@@ -1,5 +1,11 @@
 # Changelog
 
+# [0.14.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.13.0...0.14.0) (2025-08-22)
+
+### Features
+
+- add config none ([#242](https://github.com/JoshuaKGoldberg/OctoGuide/issues/242)) ([1863dab](https://github.com/JoshuaKGoldberg/OctoGuide/commit/1863dab41c3fd8d12c84414216e0ae28778646f7)), closes [#241](https://github.com/JoshuaKGoldberg/OctoGuide/issues/241)
+
 # [0.13.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.12.1...0.13.0) (2025-08-22)
 
 ### Features
