@@ -392,6 +392,19 @@ describe("runOctoGuideAction", () => {
 		});
 	});
 
+	it("should pass none as config when specified in action inputs", async () => {
+		createMockActionInputs({ config: "none" });
+		createMinimalRuleExecution();
+
+		await runOctoGuideAction(createMockContext(createMockPayload()));
+
+		expect(mockRunOctoGuideRules).toHaveBeenCalledWith({
+			auth: "mock-token",
+			config: "none",
+			entity: "https://github.com/test",
+		});
+	});
+
 	it("should fall back to recommended config when input is empty", async () => {
 		createMockActionInputs({ config: "" }); // Empty string should fall back to "recommended"
 		createMinimalRuleExecution();
