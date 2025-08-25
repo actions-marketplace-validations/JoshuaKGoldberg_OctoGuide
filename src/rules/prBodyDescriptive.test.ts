@@ -3,14 +3,14 @@ import type { Octokit } from "octokit";
 import { describe, expect, it, vi } from "vitest";
 
 import { testRule } from "../tests/testRule.js";
-import { prBodyNotEmpty } from "./prBodyNotEmpty.js";
+import { prBodyDescriptive } from "./prBodyDescriptive.js";
 
-describe(prBodyNotEmpty.about.name, () => {
+describe(prBodyDescriptive.about.name, () => {
 	it("reports when the pull request has no description", async () => {
 		const report = vi.fn();
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body: null,
@@ -32,7 +32,7 @@ describe(prBodyNotEmpty.about.name, () => {
 		const report = vi.fn();
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body: "   ",
@@ -66,7 +66,7 @@ describe(prBodyNotEmpty.about.name, () => {
 		const body = "## Description\n\nPlease describe your changes";
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body,
@@ -108,7 +108,7 @@ describe(prBodyNotEmpty.about.name, () => {
 		const report = vi.fn();
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body: "This is a description of my changes",
@@ -140,7 +140,7 @@ describe(prBodyNotEmpty.about.name, () => {
 			"## Description\n\nI fixed the login issue by updating the auth logic";
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body,
@@ -180,7 +180,7 @@ describe(prBodyNotEmpty.about.name, () => {
 			"## Description\n\nFixed bug #123 & improved performance by 50%";
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body,
@@ -218,7 +218,7 @@ describe(prBodyNotEmpty.about.name, () => {
 		const body = "## Description\n\nPlease describe YOUR changes";
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body,
@@ -264,7 +264,7 @@ describe(prBodyNotEmpty.about.name, () => {
 		const body = "## Description\n\nИсправлена ошибка аутентификации";
 
 		await testRule(
-			prBodyNotEmpty,
+			prBodyDescriptive,
 			{
 				data: {
 					body,
