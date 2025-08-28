@@ -1,5 +1,11 @@
 # Changelog
 
+# [0.15.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.14.0...0.15.0) (2025-08-28)
+
+### Features
+
+- enable/disable individual rules in actions ([#223](https://github.com/JoshuaKGoldberg/OctoGuide/issues/223)) ([2cd138b](https://github.com/JoshuaKGoldberg/OctoGuide/commit/2cd138b99a454fde8736d20fd48079f946069fb2)), closes [#219](https://github.com/JoshuaKGoldberg/OctoGuide/issues/219)
+
 # [0.14.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.13.0...0.14.0) (2025-08-22)
 
 ### Features
