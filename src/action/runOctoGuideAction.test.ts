@@ -387,8 +387,37 @@ describe("runOctoGuideAction", () => {
 
 		expect(mockRunOctoGuideRules).toHaveBeenCalledWith({
 			auth: "mock-token",
-			config: "strict",
 			entity: "https://github.com/test",
+			settings: {
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "strict",
+				rules: {},
+			},
+		});
+	});
+
+	it("should use pass none as config when specified in action inputs", async () => {
+		createMockActionInputs({ config: "none" });
+		createMinimalRuleExecution();
+
+		await runOctoGuideAction(createMockContext(createMockPayload()));
+
+		expect(mockRunOctoGuideRules).toHaveBeenCalledWith({
+			auth: "mock-token",
+			entity: "https://github.com/test",
+			settings: {
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "none",
+				rules: {},
+			},
 		});
 	});
 
@@ -400,8 +429,16 @@ describe("runOctoGuideAction", () => {
 
 		expect(mockRunOctoGuideRules).toHaveBeenCalledWith({
 			auth: "mock-token",
-			config: "none",
 			entity: "https://github.com/test",
+			settings: {
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "none",
+				rules: {},
+			},
 		});
 	});
 
@@ -413,8 +450,16 @@ describe("runOctoGuideAction", () => {
 
 		expect(mockRunOctoGuideRules).toHaveBeenCalledWith({
 			auth: "mock-token",
-			config: "recommended",
 			entity: "https://github.com/test",
+			settings: {
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "recommended",
+				rules: {},
+			},
 		});
 	});
 
@@ -455,6 +500,60 @@ describe("runOctoGuideAction", () => {
 				comments: {
 					footer: "Custom footer message!",
 					header: "",
+				},
+			}),
+		);
+	});
+
+	it("should not include rules in settings when no rules are enabled", async () => {
+		createMockActionInputs({});
+		createMinimalRuleExecution();
+
+		await runOctoGuideAction(createMockContext(createMockPayload()));
+
+		expect(mockOutputActionReports).toHaveBeenCalledWith(
+			expect.objectContaining({ metadata: { number: 1, type: "issue" } }),
+			expect.objectContaining({
+				data: { html_url: "https://github.com/test" },
+			}),
+			expect.anything(),
+			expect.objectContaining({
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "recommended",
+				rules: {},
+			}),
+		);
+	});
+
+	it("should include enabled rules in settings when specified in inputs", async () => {
+		createMockActionInputs({
+			"rule-pr-body-descriptive": "true",
+			"rule-pr-title-conventional": "false",
+		});
+		createMinimalRuleExecution();
+
+		await runOctoGuideAction(createMockContext(createMockPayload()));
+
+		expect(mockOutputActionReports).toHaveBeenCalledWith(
+			expect.objectContaining({ metadata: { number: 1, type: "issue" } }),
+			expect.objectContaining({
+				data: { html_url: "https://github.com/test" },
+			}),
+			expect.anything(),
+			expect.objectContaining({
+				comments: {
+					footer:
+						"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+					header: "",
+				},
+				config: "recommended",
+				rules: {
+					"pr-body-descriptive": true,
+					"pr-title-conventional": false,
 				},
 			}),
 		);
