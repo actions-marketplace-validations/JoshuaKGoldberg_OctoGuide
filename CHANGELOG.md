@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.15.1](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.15.0...0.15.1) (2025-09-02)
+
+### Bug Fixes
+
+- **deps:** update dependency markdownlint to v0.37.4 ([#10](https://github.com/JoshuaKGoldberg/OctoGuide/issues/10)) ([4dc58c9](https://github.com/JoshuaKGoldberg/OctoGuide/commit/4dc58c9127fb488c5aab02232880e8a230b99916))
+
 # [0.15.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.14.0...0.15.0) (2025-08-28)
 
 ### Features
