@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.15.2](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.15.1...0.15.2) (2025-09-26)
+
+### Performance Improvements
+
+- reuse action event data ([#289](https://github.com/JoshuaKGoldberg/OctoGuide/issues/289)) ([ec352f7](https://github.com/JoshuaKGoldberg/OctoGuide/commit/ec352f71a0b0951bf1140b2551cb5882d8f75ae1)), closes [#85](https://github.com/JoshuaKGoldberg/OctoGuide/issues/85)
+
 ## [0.15.1](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.15.0...0.15.1) (2025-09-02)
 
 ### Bug Fixes
