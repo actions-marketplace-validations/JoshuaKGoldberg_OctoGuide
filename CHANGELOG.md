@@ -1,5 +1,11 @@
 # Changelog
 
+# [0.16.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.15.2...0.16.0) (2025-10-09)
+
+### Features
+
+- dependabot alert link satisfies pr-linked-issue rule ([#317](https://github.com/JoshuaKGoldberg/OctoGuide/issues/317)) ([b506564](https://github.com/JoshuaKGoldberg/OctoGuide/commit/b50656489cc8fe3cacaa4fdb462f9d0145fd73da)), closes [#299](https://github.com/JoshuaKGoldberg/OctoGuide/issues/299)
+
 ## [0.15.2](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.15.1...0.15.2) (2025-09-26)
 
 ### Performance Improvements
