@@ -5,10 +5,10 @@ branding:
 description: Runs OctoGuide as a GitHub Action. 🗺️
 inputs:
   comment-footer:
-    description: Custom footer text for bot comments.
+    description: Custom footer text for OctoGuide bot comments.
     required: false
   comment-header:
-    description: Custom header text for bot comments.
+    description: Custom header text for OctoGuide bot comments.
     required: false
   config:
     default: recommended
@@ -16,6 +16,9 @@ inputs:
     required: false
   github-token:
     description: GitHub token (PAT) with repo and workflow permissions.
+    required: false
+  include-bots:
+    description: Skip running OctoGuide rules for bot-created entities (issues, PRs, discussions) and comments.
     required: false
   # Individual rule overrides
   rule-comment-meaningful:

@@ -99,6 +99,26 @@ export async function runOctoGuideAction(context: typeof github.context) {
 		type: entityType,
 	} as Entity;
 
+	/**
+	 * Determines if an entity was created by a bot based on the user.type field.
+	 * @param entity The entity to check
+	 * @returns true if the entity was created by a bot (user.type === "Bot"), false otherwise
+	 */
+	const isEntityFromBot = (entity: Entity): boolean => {
+		return (
+			"user" in entity.data &&
+			!!entity.data.user &&
+			"type" in entity.data.user &&
+			entity.data.user.type === "Bot"
+		);
+	};
+
+	const includeBots = core.getInput("include-bots") === "true";
+	if (!includeBots && isEntityFromBot(entityInput)) {
+		core.info(`Skipping OctoGuide rules for bot-created ${entityType}: ${url}`);
+		return;
+	}
+
 	const { actor, entity, reports } = await runOctoGuideRules({
 		auth,
 		entity: entityInput,
