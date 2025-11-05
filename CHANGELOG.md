@@ -1,5 +1,16 @@
 # Changelog
 
+# [0.18.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.16.0...0.18.0) (2025-11-05)
+
+### Bug Fixes
+
+- **package.json:** bump version to 0.17.0 ([#356](https://github.com/JoshuaKGoldberg/OctoGuide/issues/356)) ([a680a00](https://github.com/JoshuaKGoldberg/OctoGuide/commit/a680a0014eae46bb51eb4d1c8d4f9611da83bb62)), closes [#354](https://github.com/JoshuaKGoldberg/OctoGuide/issues/354)
+
+### Features
+
+- add config for include-associations ([#327](https://github.com/JoshuaKGoldberg/OctoGuide/issues/327)) ([9cf55bb](https://github.com/JoshuaKGoldberg/OctoGuide/commit/9cf55bb60bce685826cf189ba796a9d52a3fdf04)), closes [#324](https://github.com/JoshuaKGoldberg/OctoGuide/issues/324) [#21](https://github.com/JoshuaKGoldberg/OctoGuide/issues/21)
+- add config for include-bots ([#315](https://github.com/JoshuaKGoldberg/OctoGuide/issues/315)) ([cf0f5f3](https://github.com/JoshuaKGoldberg/OctoGuide/commit/cf0f5f385e7ba2abdf1da77d0640ffe8a61fa293)), closes [#313](https://github.com/JoshuaKGoldberg/OctoGuide/issues/313)
+
 ## [0.17.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.16.0...0.17.0) (2025-11-05)
 
 - feat: add config for include-associations ([#327](https://github.com/JoshuaKGoldberg/OctoGuide/pull/327))
