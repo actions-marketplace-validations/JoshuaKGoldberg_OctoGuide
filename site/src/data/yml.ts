@@ -118,3 +118,33 @@ export const getStartedIncludeBots = `jobs:
         with:
 +          include-bots: "true"
           github-token: \${{ secrets.GITHUB_TOKEN }}`;
+
+export const getStartedIncludeAssociationsDefault = `jobs:
+  octoguide:
+    if: \${{ !endsWith(github.actor, '[bot]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: JoshuaKGoldberg/octoguide${atVersion}
+        with:
+          github-token: \${{ secrets.GITHUB_TOKEN }}
++          include-associations: "FIRST_TIMER,FIRST_TIME_CONTRIBUTOR,CONTRIBUTOR,MEMBER"`;
+
+export const getStartedIncludeCollaborators = `jobs:
+  octoguide:
+    if: \${{ !endsWith(github.actor, '[bot]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: JoshuaKGoldberg/octoguide${atVersion}
+        with:
+          github-token: \${{ secrets.GITHUB_TOKEN }}
++          include-associations: "FIRST_TIMER,FIRST_TIME_CONTRIBUTOR,CONTRIBUTOR,MEMBER,COLLABORATOR,OWNER"`;
+
+export const getStartedIncludeFirstTimers = `jobs:
+  octoguide:
+    if: \${{ !endsWith(github.actor, '[bot]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: JoshuaKGoldberg/octoguide${atVersion}
+        with:
+          github-token: \${{ secrets.GITHUB_TOKEN }}
++          include-associations: "FIRST_TIMER,FIRST_TIME_CONTRIBUTOR"`;

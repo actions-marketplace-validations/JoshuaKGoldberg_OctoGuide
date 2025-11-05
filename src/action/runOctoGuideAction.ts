@@ -119,6 +119,47 @@ export async function runOctoGuideAction(context: typeof github.context) {
 		return;
 	}
 
+	/**
+	 * Determines if an entity should be included based on its author association.
+	 * Uses the author_association field from GitHub's webhook payload.
+	 * @param entity The entity to check
+	 * @param includeAssociations Set of allowed author associations
+	 * @returns true if the entity should be included, false if it should be skipped
+	 */
+	const shouldIncludeEntity = (
+		entity: Entity,
+		includeAssociations: Set<string>,
+	): boolean => {
+		if ("author_association" in entity.data) {
+			const association = entity.data.author_association;
+			return includeAssociations.has(association);
+		}
+
+		return true;
+	};
+
+	const includeAssociationsInput = core.getInput("include-associations");
+
+	const includeAssociations = new Set(
+		includeAssociationsInput
+			.split(",")
+			.map((a) => a.trim())
+			.filter((a) => a.length > 0),
+	);
+
+	includeAssociations.add("NONE");
+
+	if (!shouldIncludeEntity(entityInput, includeAssociations)) {
+		const association =
+			"author_association" in entityInput.data
+				? entityInput.data.author_association
+				: "UNKNOWN";
+		core.info(
+			`Skipping OctoGuide rules for ${association} created ${entityType}: ${url}`,
+		);
+		return;
+	}
+
 	const { actor, entity, reports } = await runOctoGuideRules({
 		auth,
 		entity: entityInput,
