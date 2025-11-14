@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.18.1](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.18.0...0.18.1) (2025-11-14)
+
+### Bug Fixes
+
+- **deps:** update dependency marked to v17 ([#368](https://github.com/JoshuaKGoldberg/OctoGuide/issues/368)) ([2e97e89](https://github.com/JoshuaKGoldberg/OctoGuide/commit/2e97e89c142981705abf1106c34c189f44efbcd7))
+
 # [0.18.0](https://github.com/JoshuaKGoldberg/OctoGuide/compare/0.16.0...0.18.0) (2025-11-05)
 
 ### Bug Fixes
