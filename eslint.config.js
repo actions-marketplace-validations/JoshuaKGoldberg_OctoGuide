@@ -9,9 +9,10 @@ import packageJson from "eslint-plugin-package-json";
 import perfectionist from "eslint-plugin-perfectionist";
 import * as regexp from "eslint-plugin-regexp";
 import yml from "eslint-plugin-yml";
+import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default defineConfig(
 	{
 		ignores: [
 			"**/*.snap",
@@ -57,6 +58,8 @@ export default tseslint.config(
 				{ allowNumber: true },
 			],
 			"n/no-missing-import": "off",
+			// no-unpublished-bin rule is no longer necessary and will be removed from eslint-plugin-n recommended in v18
+			"n/no-unpublished-bin": "off",
 			"n/no-unsupported-features/node-builtins": "off",
 
 			// Stylistic concerns that don't interfere with Prettier
@@ -97,6 +100,12 @@ export default tseslint.config(
 				"error",
 				{ order: { type: "asc" }, pathPattern: "^.*$" },
 			],
+		},
+	},
+	{
+		files: ["pnpm-workspace.yaml"],
+		rules: {
+			"yml/file-extension": "off",
 		},
 	},
 );

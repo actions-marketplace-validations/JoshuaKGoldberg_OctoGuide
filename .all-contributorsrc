@@ -38,7 +38,8 @@
       "contributions": [
         "bug",
         "code",
-        "ideas"
+        "ideas",
+        "doc"
       ]
     },
     {
@@ -46,7 +47,43 @@
       "name": "François Best",
       "avatar_url": "https://avatars.githubusercontent.com/u/1174092?v=4",
       "profile": "https://francoisbest.com/",
-      "contributions": ["bug", "code"]
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "fabioatcorreia",
+      "name": "Fábio Correia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22024644?v=4",
+      "profile": "https://github.com/fabioatcorreia",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "cylewaitforit",
+      "name": "cylewaitforit",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54253392?v=4",
+      "profile": "https://github.com/cylewaitforit",
+      "contributions": [
+        "ideas",
+        "doc",
+        "tool",
+        "code",
+        "maintenance",
+        "bug",
+        "test"
+      ]
+    },
+    {
+      "login": "jcamino",
+      "name": "Javier Camino",
+      "avatar_url": "https://avatars.githubusercontent.com/u/892117?v=4",
+      "profile": "https://github.com/jcamino",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

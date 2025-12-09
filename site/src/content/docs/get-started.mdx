@@ -4,7 +4,20 @@ title: Get Started
 
 import { Code } from "@astrojs/starlight/components";
 
-import { getStartedBase, getStartedStrict } from "../../data/yml.js";
+import {
+	getStartedBase,
+	getStartedStrict,
+	getStartedNone,
+	getStartedHeader,
+	getStartedFooter,
+	getStartedRuleDisable,
+	getStartedRuleEnable,
+	getStartedRuleNone,
+	getStartedIncludeBots,
+	getStartedIncludeAssociationsDefault,
+	getStartedIncludeCollaborators,
+	getStartedIncludeFirstTimers,
+} from "../../data/yml.js";
 
 OctoGuide checks that contributor activity on your GitHub repository aligns with common expectations of smoothly-running projects.
 It will automatically post friendly comments when contributors take actions you don't want them to.
@@ -45,6 +58,17 @@ You can extend it to use a _strict_ superset by adding `config: strict` to the a
 
 The _strict_ config includes all rules from _recommended_ plus more rules that enforce more opinionated practices.
 
+You can also use no config by setting `config: none` in the action's `with`:
+
+<Code
+	code={getStartedNone}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+The _none_ config includes no rules. Only rules explicitly enabled in the config will be enforced.
+
 See [Preset Configs](./configs) for more information on preset configs and their rules.
 
 ### `github-token`
@@ -57,3 +81,150 @@ For public repositories that's the following permissions:
 
 - `repo` > `public_repo`
 - `read:discussion`
+
+### `include-bots`
+
+OctoGuide by default skips running rules for bot-created entities (issues, pull requests, and discussions)
+and comments. This is useful because automated tools like Dependabot, Renovate,
+and other GitHub Apps often create PRs and issues or make comments that don't
+necessarily need to follow the same contribution guidelines as human contributors.
+
+Bot detection works by checking if the entity creator's `user.type` field is `"Bot"`,
+which is the standard way GitHub identifies bot accounts and GitHub Apps.
+
+If you want OctoGuide to run rules on bot-created entities and comments, you can
+enable this by setting `include-bots` to `"true"`:
+
+**Example:**
+
+<Code
+	code={getStartedIncludeBots}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+### `include-associations`
+
+OctoGuide allows you to control which types of contributors have rules enforced on their
+entities (issues, pull requests, and discussions) and comments based on their GitHub author association.
+This is useful because repository collaborators and owners typically have a deeper understanding
+of the project's contribution guidelines that external contributors may not have, and so might
+not need to be included in checks such as for pull requests without backing issues.
+
+The `include-associations` input accepts a comma-separated list of GitHub author associations
+to include for rule checking. The default value excludes collaborators and owners:
+
+<Code
+	code={getStartedIncludeAssociationsDefault}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+#### GitHub Author Associations
+
+OctoGuide allows filtering on [GitHub's author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation):
+
+- `FIRST_TIMER` - First time committing to GitHub
+- `FIRST_TIME_CONTRIBUTOR` - First time committing to this repository
+- `CONTRIBUTOR` - Previously committed to the repository
+- `MEMBER` - Organization member
+- `COLLABORATOR` - Repository collaborator
+- `OWNER` - Repository owner
+- `NONE` - No association (always included regardless of configuration)
+
+The `NONE` association is always included automatically, even if you don't specify it,
+ensuring that users with no association still have rules enforced.
+
+#### Including collaborators and owners
+
+If you want OctoGuide to run rules on everyone, including collaborators and owners,
+you can specify all associations:
+
+**Example:**
+
+<Code
+	code={getStartedIncludeCollaborators}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+#### Only first-time contributors
+
+You can also be more selective. For example, to only check first-time contributors:
+
+<Code
+	code={getStartedIncludeFirstTimers}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+### `comment-header`
+
+You can customize the header message that OctoGuide adds to its comments by providing a `comment-header` input as a string.
+
+**Example:**
+
+<Code
+	code={getStartedHeader}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+If no custom header is provided, OctoGuide by default has no header message.
+
+### `comment-footer`
+
+You can customize the footer message that OctoGuide adds to its comments by providing a `comment-footer` input as a string.
+
+**Example:**
+
+<Code
+	code={getStartedFooter}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+If no custom footer is provided, OctoGuide uses its default message.
+
+### Enabling and Disabling Individual Rules
+
+You can enable or disable specific rules by providing inputs with the rule names set to `"true"` or `"false"`.
+This allows you to customize which rules are active beyond the preset configs.
+
+**Examples:**
+
+To disable a rule that's normally enabled in your chosen config:
+
+<Code
+	code={getStartedRuleDisable}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+To enable a rule that's not included in your chosen config:
+
+<Code
+	code={getStartedRuleEnable}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+To use only specific rules without any preset config:
+
+<Code
+	code={getStartedRuleNone}
+	meta="lang=yml"
+	lang="diff"
+	title=".github/workflows/octoguide.yml"
+/>
+
+Rule names use kebab-case and correspond to the rule names shown in the [Rules](./rules) documentation.
+When a rule is explicitly set via input, it takes precedence over the preset config settings.

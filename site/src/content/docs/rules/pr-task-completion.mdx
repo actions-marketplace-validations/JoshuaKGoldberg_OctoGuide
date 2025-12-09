@@ -4,8 +4,9 @@ title: "pr-task-completion"
 ---
 
 import OctoGuideGitHubComment from "../../../components/OctoGuideGitHubComment.astro";
+import IncludedIn from "../../../components/IncludedIn.astro";
 
-> Included in configs: ✅ recommended, 🔒 strict
+<IncludedIn rule="pr-task-completion" />
 
 Repositories often provide a set of tasks that pull request authors are expected to complete.
 Those tasks should be marked as completed with a `[x]` in the pull request description.
@@ -38,7 +39,7 @@ For example, the following markdown:
 
 [Pull request missing task list items](https://github.com/JoshuaKGoldberg/OctoGuideExamples/pull/4#issuecomment-2839280872):
 
-<OctoGuideGitHubComment rule="pr-branch-non-default">
+<OctoGuideGitHubComment rule="pr-task-completion">
 This PR's body is missing <code>[x]</code> checks on the following tasks from the PR template.
 
 <blockquote>

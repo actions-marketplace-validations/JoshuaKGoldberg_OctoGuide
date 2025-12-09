@@ -4,6 +4,7 @@ import { DiscussionActor } from "./DiscussionActor.js";
 import { DiscussionCommentActor } from "./DiscussionCommentActor.js";
 import { IssueActor } from "./IssueActor.js";
 import { IssueLikeCommentActor } from "./IssueLikeCommentActor.js";
+import { parseEntityUrl } from "./parseEntityUrl.js";
 import { parseLocator } from "./parseLocator.js";
 import { PullRequestActor } from "./PullRequestActor.js";
 
@@ -13,12 +14,12 @@ export function createActor(octokit: Octokit, url: string) {
 		return {};
 	}
 
-	const matches = /(discussions|issues|pull)\/(\d+)/.exec(url);
+	const matches = parseEntityUrl(url);
 	if (!matches) {
 		return { locator };
 	}
 
-	const [, urlType, parentNumber] = matches;
+	const [urlType, parentNumber] = matches;
 
 	const commentNumber = /#(?:discussion|issue)comment-(\d+)/.exec(url)?.[1];
 

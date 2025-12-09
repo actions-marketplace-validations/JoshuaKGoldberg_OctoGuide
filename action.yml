@@ -4,10 +4,48 @@ branding:
   icon: map
 description: Runs OctoGuide as a GitHub Action. 🗺️
 inputs:
+  comment-footer:
+    description: Custom footer text for OctoGuide bot comments.
+    required: false
+  comment-header:
+    description: Custom header text for OctoGuide bot comments.
+    required: false
   config:
-    description: Which config to use, as 'recommended' (default) or 'strict'.
+    default: recommended
+    description: Which config to use, as 'recommended' (default), 'strict', or 'none'.
+    required: false
   github-token:
     description: GitHub token (PAT) with repo and workflow permissions.
+    required: false
+  include-associations:
+    default: "FIRST_TIMER,FIRST_TIME_CONTRIBUTOR,CONTRIBUTOR,MEMBER"
+    description: "Comma-separated list of GitHub author associations to include for rule checking. NONE is always included. Default: FIRST_TIMER,FIRST_TIME_CONTRIBUTOR,CONTRIBUTOR,MEMBER."
+    required: false
+  include-bots:
+    description: Run OctoGuide rules on bot-created entities (issues, PRs, discussions) and comments. By default, bots are skipped.
+    required: false
+  # Individual rule overrides
+  rule-comment-meaningful:
+    description: Enable/disable the comment-meaningful rule (true/false)
+    required: false
+  rule-pr-body-descriptive:
+    description: Enable/disable the pr-body-descriptive rule (true/false)
+    required: false
+  rule-pr-branch-non-default:
+    description: Enable/disable the pr-branch-non-default rule (true/false)
+    required: false
+  rule-pr-linked-issue:
+    description: Enable/disable the pr-linked-issue rule (true/false)
+    required: false
+  rule-pr-task-completion:
+    description: Enable/disable the pr-task-completion rule (true/false)
+    required: false
+  rule-pr-title-conventional:
+    description: Enable/disable the pr-title-conventional rule (true/false)
+    required: false
+  rule-text-image-alt-text:
+    description: Enable/disable the text-image-alt-text rule (true/false)
+    required: false
 name: OctoGuide Action
 runs:
   main: dist/index.js

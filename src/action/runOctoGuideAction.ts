@@ -2,10 +2,12 @@ import type * as github from "@actions/github";
 
 import * as core from "@actions/core";
 
+import { parseEntityUrl } from "../actors/parseEntityUrl.js";
 import { runOctoGuideRules } from "../index.js";
 import { cliReporter } from "../reporters/cliReporter.js";
+import { allRules } from "../rules/all.js";
 import { isKnownConfig } from "../rules/configs.js";
-import { EntityData } from "../types/entities.js";
+import { Entity, EntityData } from "../types/entities.js";
 import { outputActionReports } from "./comments/outputActionReports.js";
 import { runCommentCleanup } from "./runCommentCleanup.js";
 
@@ -48,10 +50,120 @@ export async function runOctoGuideAction(context: typeof github.context) {
 		throw new Error(`Unknown config provided: ${config}`);
 	}
 
+	const rules = allRules.reduce((acc: Record<string, boolean>, rule) => {
+		const ruleInput = core.getInput(`rule-${rule.about.name}`);
+
+		if (!ruleInput) {
+			return acc;
+		}
+
+		acc[rule.about.name] = ruleInput === "true";
+
+		return acc;
+	}, {});
+
+	const settings = {
+		comments: {
+			footer:
+				core.getInput("comment-footer") ||
+				"🗺️ This message was posted automatically by [OctoGuide](https://octo.guide): a bot for GitHub repository best practices.",
+			header: core.getInput("comment-header"),
+		},
+		config,
+		rules,
+	};
+
+	const matches = parseEntityUrl(url);
+	if (!matches) {
+		throw new Error(`Could not determine entity type from URL: ${url}`);
+	}
+
+	const [urlType] = matches;
+	const entityType =
+		urlType === "discussions"
+			? "discussion"
+			: urlType === "issues"
+				? "issue"
+				: "pull_request";
+
+	const entityNumber =
+		"number" in target && typeof target.number === "number" && target.number > 0
+			? target.number
+			: (() => {
+					throw new Error("Entity payload missing valid number property");
+				})();
+
+	const entityInput: Entity = {
+		data: target,
+		number: entityNumber,
+		type: entityType,
+	} as Entity;
+
+	/**
+	 * Determines if an entity was created by a bot based on the user.type field.
+	 * @param entity The entity to check
+	 * @returns true if the entity was created by a bot (user.type === "Bot"), false otherwise
+	 */
+	const isEntityFromBot = (entity: Entity): boolean => {
+		return (
+			"user" in entity.data &&
+			!!entity.data.user &&
+			"type" in entity.data.user &&
+			entity.data.user.type === "Bot"
+		);
+	};
+
+	const includeBots = core.getInput("include-bots") === "true";
+	if (!includeBots && isEntityFromBot(entityInput)) {
+		core.info(`Skipping OctoGuide rules for bot-created ${entityType}: ${url}`);
+		return;
+	}
+
+	/**
+	 * Determines if an entity should be included based on its author association.
+	 * Uses the author_association field from GitHub's webhook payload.
+	 * @param entity The entity to check
+	 * @param includeAssociations Set of allowed author associations
+	 * @returns true if the entity should be included, false if it should be skipped
+	 */
+	const shouldIncludeEntity = (
+		entity: Entity,
+		includeAssociations: Set<string>,
+	): boolean => {
+		if ("author_association" in entity.data) {
+			const association = entity.data.author_association;
+			return includeAssociations.has(association);
+		}
+
+		return true;
+	};
+
+	const includeAssociationsInput = core.getInput("include-associations");
+
+	const includeAssociations = new Set(
+		includeAssociationsInput
+			.split(",")
+			.map((a) => a.trim())
+			.filter((a) => a.length > 0),
+	);
+
+	includeAssociations.add("NONE");
+
+	if (!shouldIncludeEntity(entityInput, includeAssociations)) {
+		const association =
+			"author_association" in entityInput.data
+				? entityInput.data.author_association
+				: "UNKNOWN";
+		core.info(
+			`Skipping OctoGuide rules for ${association} created ${entityType}: ${url}`,
+		);
+		return;
+	}
+
 	const { actor, entity, reports } = await runOctoGuideRules({
 		auth,
-		config,
-		entity: url,
+		entity: entityInput,
+		settings,
 	});
 
 	if (reports.length) {
@@ -61,5 +173,5 @@ export async function runOctoGuideAction(context: typeof github.context) {
 		core.info("Found 0 reports. Great! ✅");
 	}
 
-	await outputActionReports(actor, entity, reports);
+	await outputActionReports(actor, entity, reports, settings);
 }

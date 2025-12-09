@@ -2,13 +2,14 @@ import * as core from "@actions/core";
 import { octokitFromAuth } from "octokit-from-auth";
 
 import type { EntityActor } from "./actors/types.js";
-import type { ConfigName } from "./types/core.js";
 import type { Entity } from "./types/entities.js";
 import type { RuleReport } from "./types/reports.js";
 import type { RuleContext } from "./types/rules.js";
+import type { Settings } from "./types/settings.js";
 
 import { createActor } from "./actors/createActor.js";
 import { runRuleOnEntity } from "./execution/runRuleOnEntity.js";
+import { allRules } from "./rules/all.js";
 import { configs } from "./rules/configs.js";
 
 /**
@@ -21,17 +22,16 @@ export interface RunOctoGuideRulesOptions {
 	auth?: string;
 
 	/**
-	 * Preset configuration to run rules from.
-	 * @default "recommended"
+	 * GitHub entity to scan. Can be either:
+	 * - A string URL (e.g., "https://github.com/owner/repo/issues/123") - will fetch entity data via API
+	 * - An Entity object with pre-fetched data - avoids additional API calls when data is already available
 	 */
-	config?: ConfigName | undefined;
+	entity: Entity | string;
 
 	/**
-	 * URL of the GitHub entity to scan.
-	 * @todo Support passing in the entity itself:
-	 * https://github.com/JoshuaKGoldberg/OctoGuide/issues/85
+	 * Settings for the run, including rules to enable.
 	 */
-	entity: string;
+	settings?: Settings;
 }
 
 /**
@@ -56,11 +56,16 @@ export interface RunOctoGuideRulesResult {
 
 /**
  * Runs OctoGuide's rules to generate a list of reports for a GitHub entity.
+ * @param options Configuration object
+ * @param options.auth GitHub authentication token or Octokit instance
+ * @param options.entity Entity input (URL string or entity data object)
+ * @param options.settings OctoGuide configuration settings including rules and comments
+ * @returns Promise resolving to results with actor, entity data, and rule reports
  */
 export async function runOctoGuideRules({
 	auth,
-	config = "recommended",
-	entity: url,
+	entity: entityInput,
+	settings,
 }: RunOctoGuideRulesOptions): Promise<RunOctoGuideRulesResult> {
 	// TODO: There's no need to create a full *writing* actor here;
 	// runOctoGuide only reads entities and runs rules on them.
@@ -70,15 +75,26 @@ export async function runOctoGuideRules({
 	// ...where only 1. is needed for runOctoGuide.
 	// https://github.com/JoshuaKGoldberg/OctoGuide/issues/56
 	const octokit = await octokitFromAuth({ auth });
+
+	const url =
+		typeof entityInput === "string" ? entityInput : entityInput.data.html_url;
+
+	if (typeof url !== "string") {
+		throw new Error("Entity data's html_url is not a string.");
+	}
+
 	const { actor, locator } = createActor(octokit, url);
 	if (!actor) {
 		throw new Error("Could not resolve GitHub entity actor.");
 	}
 
-	const entity = {
-		data: await actor.getData(),
-		...actor.metadata,
-	} as Entity;
+	const entity =
+		typeof entityInput === "string"
+			? ({
+					data: await actor.getData(),
+					...actor.metadata,
+				} as Entity)
+			: entityInput;
 
 	if (core.isDebug()) {
 		core.debug(`Full entity: ${JSON.stringify(entity, null, 2)}`);
@@ -86,8 +102,24 @@ export async function runOctoGuideRules({
 
 	const reports: RuleReport[] = [];
 
+	const config = settings?.config ?? "recommended";
+	const configRuleNames = Object.values(configs[config]).map(
+		(rule) => rule.about.name,
+	);
+	const ruleOverrides = settings?.rules ?? {};
+
+	const enabledRules = allRules.filter((rule) => {
+		const ruleName = rule.about.name;
+
+		if (ruleName in ruleOverrides) {
+			return ruleOverrides[ruleName];
+		}
+
+		return configRuleNames.includes(ruleName);
+	});
+
 	await Promise.all(
-		Object.values(configs[config]).map(async (rule) => {
+		enabledRules.map(async (rule) => {
 			const context: RuleContext = {
 				locator,
 				octokit,
