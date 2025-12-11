@@ -10,5 +10,17 @@
 	"labels": ["dependencies"],
 	"minimumReleaseAge": "7 days",
 	"patch": { "enabled": false },
-	"postUpdateOptions": ["pnpmDedupe"]
+	"postUpdateOptions": ["pnpmDedupe"],
+	"packageRules": [
+		{
+			"matchDatasources": ["npm"],
+			"minimumReleaseAge": "7 days"
+		},
+		{
+			"description": "Default to PNPM Minimum Release Age for package replacements",
+			"matchDatasources": ["npm"],
+			"matchUpdateTypes": ["replacement"],
+			"minimumReleaseAge": null
+		}
+	]
 }
